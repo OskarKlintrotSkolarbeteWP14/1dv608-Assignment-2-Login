@@ -17,3 +17,4 @@ $lv = new LayoutView();
 
 $lv->render(false, $v, $dtv);
 
+// echo var_dump($_SERVER['REQUEST_METHOD']);
