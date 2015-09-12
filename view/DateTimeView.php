@@ -4,12 +4,7 @@ class DateTimeView {
 
 
 	public function show() {
-
-		$timeStamp = getDate();
-
-		$timeString = $timeStamp['weekday'] . ", the " . $timeStamp['mday'] . "th of "
-			. $timeStamp['month'] . " " . $timeStamp['year'] . ", The time is "
-			. $timeStamp['hours'] . ':' . $timeStamp['minutes'] . ':' . $timeStamp['seconds'];
+		$timeString = date('l') . ", the " . date('jS') . " of " . date('F Y') . ", the time is " . date('H:i:s');
 
 		return '<p>' . $timeString . '</p>';
 	}
