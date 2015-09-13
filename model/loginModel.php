@@ -7,3 +7,22 @@
  */
 
 namespace model;
+
+class LoginModel
+{
+    private static $username = "Admin";
+    private static $password = "Password";
+    private static $loggedIn;
+
+    public function login($username, $password)
+    {
+        self::$loggedIn = $username == self::$username && $password == self::$password;
+        return self::$loggedIn;
+    }
+
+    public function isUserLoggedIn(){
+        if (empty(self::$loggedIn))
+            return false;
+        return self::$loggedIn;
+    }
+}

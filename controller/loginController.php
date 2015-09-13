@@ -7,3 +7,17 @@
  */
 
 namespace controller;
+
+require_once("./model/LoginModel.php");
+require_once("./view/LoginView.php");
+
+class LoginController
+{
+    private $LoginView;
+    private $LoginModel;
+
+    public function __construct($model){
+        $this->LoginModel = $model;
+        $this->LoginView = \view\LoginView($this->LoginModel);
+    }
+}

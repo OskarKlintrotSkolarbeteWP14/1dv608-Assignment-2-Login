@@ -1,5 +1,7 @@
 <?php
 
+require_once("./model/LoginModel.php");
+
 class LoginView {
 	private static $login = 'LoginView::Login';
 	private static $logout = 'LoginView::Logout';
@@ -10,7 +12,12 @@ class LoginView {
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
 
-	
+	// Added by myself; Oskar Klintrot
+	private $LoginModel;
+
+	public function __construct($model){
+		$this->LoginModel = $model;
+	}
 
 	/**
 	 * Create HTTP response
@@ -26,9 +33,19 @@ class LoginView {
 				$message = "Username is missing";
 			else if(empty($_POST[self::$password]))
 				$message = "Password is missing";
+			else if (!$this->LoginModel->login($_POST[self::$name], $_POST[self::$password])) {
+				$message = "Wrong name or password";
+			}
 		}
 
-		$response = $this->generateLoginFormHTML($message);
+		if($this->LoginModel->isUserLoggedIn())
+		{
+			$message = "Welcome";
+			$response = $this->generateLogoutButtonHTML($message);
+		}
+		else
+			$response = $this->generateLoginFormHTML($message);
+
 		//$response .= $this->generateLogoutButtonHTML($message);
 		return $response;
 	}
@@ -79,6 +96,7 @@ class LoginView {
 		//RETURN REQUEST VARIABLE: USERNAME
 		if(isset($_POST[self::$name]))
 			return $_POST[self::$name];
+		return '';
 	}
 	
 }
