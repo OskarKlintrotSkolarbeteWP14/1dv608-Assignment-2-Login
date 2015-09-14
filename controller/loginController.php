@@ -26,7 +26,7 @@ class LoginController
     }
 
     public function doLogin() {
-        if (self::$LoginView->doTheUserWantToLogout()) {
+        if (self::$LoginView->doTheUserWantToLogout() && self::$LoginModel->isUserLoggedIn()) {
             self::$LoginModel->logout();
         }
         else if(self::$LoginView->doTheUserWantToLogin() && !self::$LoginModel->isUserLoggedIn()) {
