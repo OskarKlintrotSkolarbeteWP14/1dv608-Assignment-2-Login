@@ -32,9 +32,9 @@ class LoginController
         else if(self::$LoginView->doTheUserWantToLogin()/* && !self::$LoginModel->isUserLoggedIn()*/) {
             self::$LoginModel->login(self::$LoginView->getUser());
         }
-//        if ($_POST) {
-//            header("Location: " . $_SERVER['REQUEST_URI']);
-//        }
+        if ($_POST) {
+            header("Location: " . $_SERVER['REQUEST_URI']);
+        }
     }
 
     public function getLoginView() {
