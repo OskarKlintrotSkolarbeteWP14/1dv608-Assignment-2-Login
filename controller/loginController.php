@@ -9,15 +9,35 @@
 namespace controller;
 
 require_once("./model/LoginModel.php");
+require_once("./model/User.php");
 require_once("./view/LoginView.php");
+
+use view;
+use model;
 
 class LoginController
 {
-    private $LoginView;
-    private $LoginModel;
+    private static $LoginView;
+    private static $LoginModel;
 
     public function __construct($model){
-        $this->LoginModel = $model;
-        $this->LoginView = \view\LoginView($this->LoginModel);
+        self::$LoginModel = $model;
+        self::$LoginView = new view\LoginView(self::$LoginModel);
+    }
+
+    public function doLogin() {
+        if (self::$LoginView->doTheUserWantToLogout()) {
+            self::$LoginModel->logout();
+        }
+        else if (self::$LoginModel->isUserLoggedIn()) {
+
+        }
+        else if(self::$LoginView->doTheUserWantToLogin()) {
+            self::$LoginModel->login(self::$LoginView->getUser());
+        }
+    }
+
+    public function getLoginView() {
+        return self::$LoginView;
     }
 }

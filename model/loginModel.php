@@ -12,17 +12,25 @@ class LoginModel
 {
     private static $username = "Admin";
     private static $password = "Password";
-    private static $loggedIn;
+    private static $loggedIn = "LoggedInSessionVariable";
 
-    public function login($username, $password)
+    public function checkCredential(User $User) {
+        return $User->getUsername() == self::$username && $User->getPassword() == self::$password;
+    }
+
+    public function login(User $User)
     {
-        self::$loggedIn = $username == self::$username && $password == self::$password;
-        return self::$loggedIn;
+        $_SESSION[self::$loggedIn] = $User->getUsername() == self::$username && $User->getPassword() == self::$password;
+    }
+
+    public function logout()
+    {
+        $_SESSION[self::$loggedIn] = false;
     }
 
     public function isUserLoggedIn(){
-        if (empty(self::$loggedIn))
+        if (empty($_SESSION[self::$loggedIn]))
             return false;
-        return self::$loggedIn;
+        return $_SESSION[self::$loggedIn];
     }
 }

@@ -1,5 +1,9 @@
 <?php
 
+namespace view;
+
+use model\User;
+
 require_once("./model/LoginModel.php");
 
 class LoginView {
@@ -19,6 +23,32 @@ class LoginView {
 		$this->LoginModel = $model;
 	}
 
+	public function loginTest($User) {
+		if(empty($_POST[self::$name]))
+			return "Username is missing";
+		else if(empty($_POST[self::$password]))
+			return "Password is missing";
+		else if (!$this->LoginModel->checkCredential($User))
+			return "Wrong name or password";
+	}
+
+	public function getUser() {
+		$User = '';
+		if($_SERVER['REQUEST_METHOD'] == "POST")
+			$User = new User($_POST[self::$name], $_POST[self::$password]);
+		else
+			$User = new User('', '');
+		return $User;
+	}
+
+	public function doTheUserWantToLogin() {
+		return isset($_POST[self::$login]);
+	}
+
+	public function doTheUserWantToLogout() {
+		return isset($_POST[self::$logout]);
+	}
+
 	/**
 	 * Create HTTP response
 	 *
@@ -28,25 +58,24 @@ class LoginView {
 	 */
 	public function response() {
 		$message = '';
-		if(isset($_POST[self::$login])) {
-			if(empty($_POST[self::$name]))
-				$message = "Username is missing";
-			else if(empty($_POST[self::$password]))
-				$message = "Password is missing";
-			else if (!$this->LoginModel->login($_POST[self::$name], $_POST[self::$password])) {
-				$message = "Wrong name or password";
-			}
+		if($this->doTheUserWantToLogin()) {
+			$message = $this->loginTest($this->getUser());
+		}
+
+		if($this->doTheUserWantToLogout()) {
+			$message = $this->LoginModel->logout();
 		}
 
 		if($this->LoginModel->isUserLoggedIn())
 		{
-			$message = "Welcome";
+			if($this->doTheUserWantToLogin())
+				$message = "Welcome";
 			$response = $this->generateLogoutButtonHTML($message);
 		}
 		else
 			$response = $this->generateLoginFormHTML($message);
 
-		//$response .= $this->generateLogoutButtonHTML($message);
+		// $response .= $this->generateLogoutButtonHTML($message);
 		return $response;
 	}
 

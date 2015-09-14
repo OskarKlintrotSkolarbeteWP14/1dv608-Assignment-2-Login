@@ -11,13 +11,17 @@ require_once('controller/LoginController.php');
 error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
+session_start();
+
 //CREATE OBJECTS OF THE VIEWS
 $LoginModel = new \model\LoginModel();
-$LoginView = new LoginView($LoginModel);
+$LoginController = new \controller\LoginController($LoginModel);
+$LoginView = $LoginController->getLoginView();
 $DateTimeView = new DateTimeView();
 $LayoutView = new LayoutView();
 
+$LoginController->doLogin();
+$LayoutView->render($LoginModel->isUserLoggedIn(), $LoginView, $DateTimeView);
 
-$LayoutView->render(false, $LoginView, $DateTimeView);
-
+// echo "Server request method";
 // echo var_dump($_SERVER['REQUEST_METHOD']);
