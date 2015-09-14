@@ -16,6 +16,7 @@ class LoginView {
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
 	private static $message = "MessageSessionVariable";
+	private static $username = "UsernameSessionVariable";
 
 	private $LoginModel;
 
@@ -144,8 +145,14 @@ class LoginView {
 	private function getRequestUserName() {
 		//RETURN REQUEST VARIABLE: USERNAME
 		if(isset($_POST[self::$name]))
-			return $_POST[self::$name];
-		return '';
+			$_SESSION[self::$username] = $_POST[self::$name];
+		if($_SERVER['REQUEST_METHOD'] == "GET") {
+			if (isset($_SESSION[self::$username])) {
+				$ret = $_SESSION[self::$username];
+				$_SESSION[self::$username] = null;
+				return $ret;
+			}
+		}
+			return '';
 	}
-	
 }
