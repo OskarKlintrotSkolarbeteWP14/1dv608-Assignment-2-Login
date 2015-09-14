@@ -29,11 +29,11 @@ class LoginController
         if (self::$LoginView->doTheUserWantToLogout()) {
             self::$LoginModel->logout();
         }
-        else if (self::$LoginModel->isUserLoggedIn()) {
-
-        }
-        else if(self::$LoginView->doTheUserWantToLogin()) {
+        else if(self::$LoginView->doTheUserWantToLogin() && !self::$LoginModel->isUserLoggedIn()) {
             self::$LoginModel->login(self::$LoginView->getUser());
+        }
+        if ($_POST) {
+            header("Location: " . $_SERVER['REQUEST_URI']);
         }
     }
 

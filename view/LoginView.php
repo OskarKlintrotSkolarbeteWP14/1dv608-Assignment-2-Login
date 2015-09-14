@@ -15,8 +15,8 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
+	private static $message = "MessageSessionVariable";
 
-	// Added by myself; Oskar Klintrot
 	private $LoginModel;
 
 	public function __construct($model){
@@ -49,6 +49,22 @@ class LoginView {
 		return isset($_POST[self::$logout]);
 	}
 
+	public function setMessage($message) {
+		if($_POST) {
+			$_SESSION[self::$message] = $message;
+		}
+	}
+
+	public function getMessage() {
+		if($_SERVER['REQUEST_METHOD'] == "GET") {
+			$ret = $_SESSION[self::$message];
+			$_SESSION[self::$message] = null;
+			if(isset($ret))
+				return $ret;
+			return '';
+		}
+	}
+
 	/**
 	 * Create HTTP response
 	 *
@@ -59,23 +75,24 @@ class LoginView {
 	public function response() {
 		$message = '';
 		if($this->doTheUserWantToLogin()) {
-			$message = $this->loginTest($this->getUser());
+			$this->setMessage($this->loginTest($this->getUser()));
 		}
-
-		if($this->doTheUserWantToLogout()) {
-			//$message = $this->LoginModel->logout();
-			if($this->LoginModel->isUserLoggedIn())
-				$message = "Bye bye!";
+		else if($this->doTheUserWantToLogout()) {
+			$this->setMessage("Bye bye!");
 		}
 
 		if($this->LoginModel->isUserLoggedIn())
 		{
 			if($this->doTheUserWantToLogin())
-				$message = "Welcome";
+				$this->setMessage("Welcome");
+			$message = $this->getMessage();
 			$response = $this->generateLogoutButtonHTML($message);
 		}
 		else
+		{
+			$message = $this->getMessage();
 			$response = $this->generateLoginFormHTML($message);
+		}
 
 		// $response .= $this->generateLogoutButtonHTML($message);
 		return $response;
