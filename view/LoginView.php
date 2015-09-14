@@ -31,6 +31,8 @@ class LoginView {
 			return "Password is missing";
 		else if (!$this->LoginModel->checkCredential($User))
 			return "Wrong name or password";
+		else
+			return '';
 	}
 
 	public function getUser() {
@@ -50,15 +52,27 @@ class LoginView {
 		return isset($_POST[self::$logout]);
 	}
 
-	public function setMessage($message) {
+	public function setLogoutView() {
+		$this->setMessage("Bye bye!");
+	}
+
+	public function setLoginView() {
+		$message = ($this->loginTest($this->getUser()));
+		if(empty($message))
+			$message = "Welcome";
+		$this->setMessage($message);
+	}
+
+	private function setMessage($message) {
 		if($_POST) {
 			$_SESSION[self::$message] = $message;
 		}
 	}
 
-	public function getMessage() {
+	private function getMessage() {
 		if($_SERVER['REQUEST_METHOD'] == "GET") {
 			if(isset($_SESSION[self::$message])) {
+				$ret = null;
 				$ret = $_SESSION[self::$message];
 				$_SESSION[self::$message] = null;
 				return $ret;
@@ -76,17 +90,9 @@ class LoginView {
 	 */
 	public function response() {
 		$message = '';
-		if($this->doTheUserWantToLogin()) {
-			$this->setMessage($this->loginTest($this->getUser()));
-		}
-		else if($this->doTheUserWantToLogout()) {
-			$this->setMessage("Bye bye!");
-		}
 
 		if($this->LoginModel->isUserLoggedIn())
 		{
-			if($this->doTheUserWantToLogin())
-				$this->setMessage("Welcome");
 			$message = $this->getMessage();
 			$response = $this->generateLogoutButtonHTML($message);
 		}
