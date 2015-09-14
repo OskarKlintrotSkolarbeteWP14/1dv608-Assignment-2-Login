@@ -63,7 +63,8 @@ class LoginView {
 		}
 
 		if($this->doTheUserWantToLogout()) {
-			$message = $this->LoginModel->logout();
+			//$message = $this->LoginModel->logout();
+			$message = "Bye bye!";
 		}
 
 		if($this->LoginModel->isUserLoggedIn())
