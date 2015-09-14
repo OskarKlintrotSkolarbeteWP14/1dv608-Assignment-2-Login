@@ -51,6 +51,7 @@ class LoginView {
 	}
 
 	public function setMessage($message) {
+		$_SESSION[self::$message] = null;
 		if($_POST) {
 			$_SESSION[self::$message] = $message;
 		}
