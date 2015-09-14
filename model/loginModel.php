@@ -25,7 +25,7 @@ class LoginModel
 
     public function logout()
     {
-        if($this->isUserLoggedIn())
+        //if($this->isUserLoggedIn())
             $_SESSION[self::$loggedIn] = false;
     }
 

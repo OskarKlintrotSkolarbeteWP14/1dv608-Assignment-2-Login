@@ -26,15 +26,15 @@ class LoginController
     }
 
     public function doLogin() {
-        if (self::$LoginView->doTheUserWantToLogout() && self::$LoginModel->isUserLoggedIn()) {
+        if (self::$LoginView->doTheUserWantToLogout()/* && self::$LoginModel->isUserLoggedIn()*/) {
             self::$LoginModel->logout();
         }
-        else if(self::$LoginView->doTheUserWantToLogin() && !self::$LoginModel->isUserLoggedIn()) {
+        else if(self::$LoginView->doTheUserWantToLogin()/* && !self::$LoginModel->isUserLoggedIn()*/) {
             self::$LoginModel->login(self::$LoginView->getUser());
         }
-        if ($_POST) {
-            header("Location: " . $_SERVER['REQUEST_URI']);
-        }
+//        if ($_POST) {
+//            header("Location: " . $_SERVER['REQUEST_URI']);
+//        }
     }
 
     public function getLoginView() {
