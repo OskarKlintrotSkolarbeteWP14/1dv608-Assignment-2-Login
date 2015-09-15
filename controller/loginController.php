@@ -11,6 +11,7 @@ namespace controller;
 require_once("./model/LoginModel.php");
 require_once("./model/User.php");
 require_once("./view/LoginView.php");
+require_once("./view/PrgView.php");
 
 use view;
 use model;
@@ -19,10 +20,12 @@ class LoginController
 {
     private static $LoginView;
     private static $LoginModel;
+    private static $PrgView;
 
     public function __construct($model){
         self::$LoginModel = $model;
         self::$LoginView = new view\LoginView(self::$LoginModel);
+        self::$PrgView = new view\PrgView();
     }
 
     public function doLogin() {
@@ -34,8 +37,8 @@ class LoginController
             self::$LoginView->setLoginView();
             self::$LoginModel->login(self::$LoginView->getUser());
         }
-        if ($_POST) {
-            header("Location: " . $_SERVER['REQUEST_URI']);
+        if (self::$PrgView->isPost()) {
+            self::$PrgView->reloadPage();
         }
     }
 
