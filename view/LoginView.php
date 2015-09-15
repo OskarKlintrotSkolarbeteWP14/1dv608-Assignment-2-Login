@@ -72,9 +72,8 @@ class LoginView {
 	private function getMessage() {
 		if($_SERVER['REQUEST_METHOD'] == "GET") {
 			if(isset($_SESSION[self::$message])) {
-				$ret = null;
 				$ret = $_SESSION[self::$message];
-				$_SESSION[self::$message] = null;
+				unset($_SESSION[self::$message]);
 				return $ret;
 			}
 		}
