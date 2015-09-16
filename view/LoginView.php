@@ -6,6 +6,10 @@ use model\User;
 
 require_once("./model/LoginModel.php");
 
+/**
+ * Class LoginView
+ * @package view
+ */
 class LoginView {
 	private static $login = 'LoginView::Login';
 	private static $logout = 'LoginView::Logout';
@@ -20,11 +24,18 @@ class LoginView {
 
 	private $LoginModel;
 
-	public function __construct($model){
+	/**
+	 * @param \model\LoginModel $model
+	 */
+	public function __construct(\model\LoginModel $model){
 		$this->LoginModel = $model;
 	}
 
-	public function loginTest($User) {
+	/**
+	 * @param User $User
+	 * @return string Error message, empty if credentials are valid
+	 */
+	public function loginTest(\model\User $User) {
 		if(empty($_POST[self::$name]))
 			return "Username is missing";
 		else if(empty($_POST[self::$password]))
@@ -35,6 +46,9 @@ class LoginView {
 			return '';
 	}
 
+	/**
+	 * @return User|string The user entered in the UI
+	 */
 	public function getUser() {
 		$User = '';
 		if($_SERVER['REQUEST_METHOD'] == "POST")
@@ -44,18 +58,24 @@ class LoginView {
 		return $User;
 	}
 
+	/**
+	 * @return bool True if the user wants to login
+	 */
 	public function doTheUserWantToLogin() {
 		return isset($_POST[self::$login]);
 	}
 
+	/**
+	 * @return bool True if the user wants to logout
+	 */
 	public function doTheUserWantToLogout() {
 		return isset($_POST[self::$logout]);
 	}
 
-	public function setLogoutView() {
-		$this->setMessage("Bye bye!");
-	}
-
+	/**
+	 * Set the message to be seen on successful login or
+	 * displays the error message if login failed
+	 */
 	public function setLoginView() {
 		$message = ($this->loginTest($this->getUser()));
 		if(empty($message))
@@ -63,12 +83,25 @@ class LoginView {
 		$this->setMessage($message);
 	}
 
+	/**
+	 * Set the message to be displayed on logout
+	 */
+	public function setLogoutView() {
+		$this->setMessage("Bye bye!");
+	}
+
+	/**
+	 * @param $message Set a one time message
+	 */
 	private function setMessage($message) {
 		if($_POST) {
 			$_SESSION[self::$message] = $message;
 		}
 	}
 
+	/**
+	 * @return string Can only be get once, then it is deleted
+	 */
 	private function getMessage() {
 		if($_SERVER['REQUEST_METHOD'] == "GET") {
 			if(isset($_SESSION[self::$message])) {
@@ -145,10 +178,11 @@ class LoginView {
 			</form>
 		';
 	}
-	
-	//CREATE GET-FUNCTIONS TO FETCH REQUEST VARIABLES
+
+	/**
+	 * @return string Username that the user tries to login with
+	 */
 	private function getRequestUserName() {
-		//RETURN REQUEST VARIABLE: USERNAME
 		if(isset($_POST[self::$name]))
 			$_SESSION[self::$username] = $_POST[self::$name];
 		if($_SERVER['REQUEST_METHOD'] == "GET") {

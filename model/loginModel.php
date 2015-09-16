@@ -8,27 +8,44 @@
 
 namespace model;
 
+/**
+ * Class LoginModel
+ * @package model
+ */
 class LoginModel
 {
     private static $username = "Admin";
     private static $password = "Password";
     private static $loggedIn = "LoggedInSessionVariable";
 
+    /**
+     * @param User $User User to be authenticated
+     * @return bool True if the login succeed, otherwise returns false
+     */
     public function checkCredential(User $User) {
         return $User->getUsername() == self::$username && $User->getPassword() == self::$password;
     }
 
+    /**
+     * Logs in the user
+     * @param User $User User to login
+     */
     public function login(User $User)
     {
-        $_SESSION[self::$loggedIn] = $User->getUsername() == self::$username && $User->getPassword() == self::$password;
+        $_SESSION[self::$loggedIn] = $this->checkCredential($User);
     }
 
+    /**
+     * Logout the user
+     */
     public function logout()
     {
-        //if($this->isUserLoggedIn())
-            $_SESSION[self::$loggedIn] = false;
+        $_SESSION[self::$loggedIn] = false;
     }
 
+    /**
+     * @return bool True if the user is logged in, otherwise false
+     */
     public function isUserLoggedIn(){
         if (empty($_SESSION[self::$loggedIn]))
             return false;

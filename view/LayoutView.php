@@ -1,8 +1,15 @@
 <?php
 
-
+/**
+ * Class LayoutView
+ */
 class LayoutView {
-  
+
+  /** Renders HTML
+   * @param $isLoggedIn
+   * @param \view\LoginView $v
+   * @param DateTimeView $dtv
+   */
   public function render($isLoggedIn, \view\LoginView $v, DateTimeView $dtv) {
     echo '<!DOCTYPE html>
       <html>
@@ -23,7 +30,11 @@ class LayoutView {
       </html>
     ';
   }
-  
+
+  /**
+   * @param $isLoggedIn
+   * @return string
+   */
   private function renderIsLoggedIn($isLoggedIn) {
     if ($isLoggedIn) {
       return '<h2>Logged in</h2>';
