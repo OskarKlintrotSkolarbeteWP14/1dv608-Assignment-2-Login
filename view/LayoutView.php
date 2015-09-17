@@ -1,8 +1,11 @@
 <?php
 
+namespace view;
+
 /**
  * Class LayoutView
  */
+
 class LayoutView {
 
   /** Renders HTML

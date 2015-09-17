@@ -17,8 +17,8 @@ session_start();
 $LoginModel = new \model\LoginModel();
 $LoginController = new \controller\LoginController($LoginModel);
 $LoginView = $LoginController->getLoginView();
-$DateTimeView = new DateTimeView();
-$LayoutView = new LayoutView();
+$DateTimeView = new \view\DateTimeView();
+$LayoutView = new \view\LayoutView();
 
 $LoginController->doLogin();
 $LayoutView->render($LoginModel->isUserLoggedIn(), $LoginView, $DateTimeView);
