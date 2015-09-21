@@ -82,7 +82,7 @@ class LoginView {
 
 	public function setKeepLogin() {
 		setcookie(self::$cookieName, $_POST[self::$name], -1);
-		setcookie(self::$cookiePassword, null, -1);
+		setcookie(self::$cookiePassword, password_hash($_POST[self::$name], PASSWORD_DEFAULT), -1);
 	}
 
 	public function removeKeepLogin() {
