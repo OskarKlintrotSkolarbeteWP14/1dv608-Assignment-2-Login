@@ -17,7 +17,7 @@ class LoginModel
     private static $username = "Admin";
     private static $password = "Password";
     private static $loggedIn = "LoggedInSession";
-    private static $folder = "persistentLogin/";
+    private static $folder = "./model/persistentLogin/";
 
     /** Returns a randomized string
      *
