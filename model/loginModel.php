@@ -87,7 +87,7 @@ class LoginModel
     }
 
     public function loginSavedUser(User $user) {
-        $_SESSION[self::$loggedIn] = $this->checkCredentialForSavedUser($user->getUsername(), $user->getPassword());
+        $_SESSION[self::$loggedIn] = $this->checkCredentialForSavedUser($user);
     }
 
     public function getFileName($username) {
