@@ -16,23 +16,34 @@ class LoginModel
 {
     private static $username = "Admin";
     private static $password = "Password";
-    private static $loggedIn = "LoggedInSessionVariable";
+    private static $loggedIn = "LoggedInSession";
+    private static $folder = "persistentLogin/";
+
+    /** Returns a randomized string
+     *
+     * From http://stackoverflow.com/questions/19017694/one-line-php-random-string-generator
+     *
+     * @return string
+     */
+    private function createRandomString() {
+        return rtrim(base64_encode(md5(microtime())),"=");
+    }
 
     /**
-     * @param User $User User to be authenticated
+     * @param User $user User to be authenticated
      * @return bool True if the login succeed, otherwise returns false
      */
-    public function checkCredential(User $User) {
-        return $User->getUsername() == self::$username && $User->getPassword() == self::$password;
+    public function checkCredential(User $user) {
+        return $user->getUsername() == self::$username && $user->getPassword() == self::$password;
     }
 
     /**
      * Logs in the user
-     * @param User $User User to login
+     * @param User $user User to login
      */
-    public function login(User $User)
+    public function login(User $user)
     {
-        $_SESSION[self::$loggedIn] = $this->checkCredential($User);
+        $_SESSION[self::$loggedIn] = $this->checkCredential($user);
 
         return $_SESSION[self::$loggedIn];
     }
@@ -52,5 +63,34 @@ class LoginModel
         if (empty($_SESSION[self::$loggedIn]))
             return false;
         return $_SESSION[self::$loggedIn];
+    }
+
+    public function saveUser(User $user) {
+        $randomizedPassword = $this->createRandomString();
+        var_dump($this->getFileName($user->getUsername()));
+        file_put_contents($this->getFileName($user->getUsername()), $randomizedPassword);
+        return $randomizedPassword;
+    }
+
+    public function removeUser($username) {
+        unlink($this->getFileName($username));
+    }
+
+    public function checkCredentialForSavedUser(User $user) {
+        try {
+//            var_dump(file_get_contents($this->getFileName($username)));
+            return $user->getPassword() == file_get_contents($this->getFileName($user->getUsername()));
+        }
+        catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function loginSavedUser(User $user) {
+        $_SESSION[self::$loggedIn] = $this->checkCredentialForSavedUser($user->getUsername(), $user->getPassword());
+    }
+
+    public function getFileName($username) {
+        return self::$folder . $username;
     }
 }

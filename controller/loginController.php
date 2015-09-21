@@ -39,16 +39,22 @@ class LoginController
      * Function for handling states associated with the login
      */
     public function doLogin() {
+        if(self::$LoginView->checkIfPersistentLoggedIn()) {
+            self::$LoginModel->loginSavedUser(self::$LoginView->getLoggedInUser());
+        }
+
         if (self::$LoginView->doTheUserWantToLogout() && self::$LoginModel->isUserLoggedIn()) {
             self::$LoginView->setLogoutView();
             self::$LoginModel->logout();
-            self::$LoginView->removeKeepLogin();
+            $tempUser = self::$LoginView->removeKeepLogin();
+            self::$LoginModel->removeUser($tempUser);
         }
         else if(self::$LoginView->doTheUserWantToLogin() && !self::$LoginModel->isUserLoggedIn()) {
             self::$LoginView->setLoginView();
             $successfulLogin = self::$LoginModel->login(self::$LoginView->getUser());
             if($successfulLogin && self::$LoginView->isKeepLoggedInChecked()) {
-                self::$LoginView->setKeepLogin();
+                $randomizedPassword = self::$LoginModel->saveUser(self::$LoginView->getUser());
+                self::$LoginView->setKeepLogin($randomizedPassword);
             }
         }
         if (self::$PrgView->isPost()) {

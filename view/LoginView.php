@@ -53,6 +53,8 @@ class LoginView {
 		$User = '';
 		if($_SERVER['REQUEST_METHOD'] == "POST")
 			$User = new User($_POST[self::$name], $_POST[self::$password]);
+		else if (isset($_COOKIE[self::$cookieName]) && isset($_COOKIE[self::$cookiePassword]))
+			$User = new User($_COOKIE[self::$cookieName], '');
 		else
 			$User = new User('', '');
 		return $User;
@@ -80,16 +82,30 @@ class LoginView {
 		return isset($_POST[self::$keep]);
 	}
 
-	public function setKeepLogin() {
+	public function setKeepLogin($randomizedPassword) {
 		setcookie(self::$cookieName, $_POST[self::$name], -1);
-		setcookie(self::$cookiePassword, password_hash($_POST[self::$name], PASSWORD_DEFAULT), -1);
+		setcookie(self::$cookiePassword, $randomizedPassword, -1);
 	}
 
 	public function removeKeepLogin() {
 		if (isset($_COOKIE[self::$cookieName]) || isset($_COOKIE[self::$cookiePassword])) {
+			$tempUsername = $_COOKIE[self::$cookieName];
 			setcookie(self::$cookieName, null, time() - 300);
 			setcookie(self::$cookiePassword, null, time() - 300);
+			return $tempUsername;
 		}
+	}
+
+	public function getLoggedInUser() {
+		return new User($_COOKIE[self::$cookieName], $_COOKIE[self::$cookiePassword]);
+	}
+
+	public function checkIfPersistentLoggedIn() {
+		if (isset($_COOKIE[self::$cookieName]) && isset($_COOKIE[self::$cookiePassword])) {
+			$user = new User($_COOKIE[self::$cookieName], $_COOKIE[self::$cookiePassword]);
+			return $this->LoginModel->checkCredentialForSavedUser($user);
+		}
+		return false;
 	}
 
 	/**
