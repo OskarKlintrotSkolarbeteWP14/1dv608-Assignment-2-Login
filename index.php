@@ -25,3 +25,9 @@ $LayoutView->render($LoginModel->isUserLoggedIn(), $LoginView, $DateTimeView);
 
 // echo "Server request method";
 // echo var_dump($_SERVER['REQUEST_METHOD']);
+
+var_dump($_SESSION["LoggedInSessionVariable"]);
+if(isset($_COOKIE["LoginView::CookieName"]))
+    var_dump($_COOKIE["LoginView::CookieName"]);
+else
+    echo 'No cookie found';

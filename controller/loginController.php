@@ -42,10 +42,14 @@ class LoginController
         if (self::$LoginView->doTheUserWantToLogout() && self::$LoginModel->isUserLoggedIn()) {
             self::$LoginView->setLogoutView();
             self::$LoginModel->logout();
+            self::$LoginView->removeKeepLogin();
         }
         else if(self::$LoginView->doTheUserWantToLogin() && !self::$LoginModel->isUserLoggedIn()) {
             self::$LoginView->setLoginView();
-            self::$LoginModel->login(self::$LoginView->getUser());
+            $successfulLogin = self::$LoginModel->login(self::$LoginView->getUser());
+            if($successfulLogin && self::$LoginView->isKeepLoggedInChecked()) {
+                self::$LoginView->setKeepLogin();
+            }
         }
         if (self::$PrgView->isPost()) {
             self::$PrgView->reloadPage();

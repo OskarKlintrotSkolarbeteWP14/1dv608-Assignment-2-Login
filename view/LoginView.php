@@ -72,6 +72,23 @@ class LoginView {
 		return isset($_POST[self::$logout]);
 	}
 
+	/** Returns true if the users has checked the "Keep me logged in"-button
+	 *
+	 * @return bool True if users want to be kept logged in
+	 */
+	public function isKeepLoggedInChecked() {
+		return isset($_POST[self::$keep]);
+	}
+
+	public function setKeepLogin() {
+		setcookie(self::$cookieName, self::$cookiePassword, -1);
+	}
+
+	public function removeKeepLogin() {
+		if (isset($_COOKIE[self::$cookieName]))
+			setcookie(self::$cookieName, null, time() -300);
+	}
+
 	/**
 	 * Set the message to be seen on successful login or
 	 * displays the error message if login failed

@@ -33,6 +33,8 @@ class LoginModel
     public function login(User $User)
     {
         $_SESSION[self::$loggedIn] = $this->checkCredential($User);
+
+        return $_SESSION[self::$loggedIn];
     }
 
     /**
