@@ -27,7 +27,15 @@ $LayoutView->render($LoginModel->isUserLoggedIn(), $LoginView, $DateTimeView);
 // echo var_dump($_SERVER['REQUEST_METHOD']);
 
 var_dump($_SESSION["LoggedInSessionVariable"]);
-if(isset($_COOKIE["LoginView::CookieName"]))
-    var_dump($_COOKIE["LoginView::CookieName"]);
+if(isset($_COOKIE["LoginView::CookieName"]) || isset($_COOKIE["LoginView::CookiePassword"])) {
+    if (isset($_COOKIE["LoginView::CookieName"]))
+        var_dump($_COOKIE["LoginView::CookieName"]);
+    else
+        echo 'No username cookie found';
+    if (isset($_COOKIE["LoginView::CookiePassword"]))
+        var_dump($_COOKIE["LoginView::CookiePassword"]);
+    else
+        echo 'No password cookie found';
+}
 else
-    echo 'No cookie found';
+    echo 'No cookies found';

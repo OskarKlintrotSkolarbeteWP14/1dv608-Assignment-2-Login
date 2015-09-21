@@ -81,12 +81,15 @@ class LoginView {
 	}
 
 	public function setKeepLogin() {
-		setcookie(self::$cookieName, self::$cookiePassword, -1);
+		setcookie(self::$cookieName, $_POST[self::$name], -1);
+		setcookie(self::$cookiePassword, null, -1);
 	}
 
 	public function removeKeepLogin() {
-		if (isset($_COOKIE[self::$cookieName]))
-			setcookie(self::$cookieName, null, time() -300);
+		if (isset($_COOKIE[self::$cookieName]) || isset($_COOKIE[self::$cookiePassword])) {
+			setcookie(self::$cookieName, null, time() - 300);
+			setcookie(self::$cookiePassword, null, time() - 300);
+		}
 	}
 
 	/**
