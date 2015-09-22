@@ -156,7 +156,9 @@ class LoginView {
 	 */
 	public function setLoginView() {
 		$message = ($this->loginTest($this->getUser()));
-		if(empty($message))
+		if (empty($message) && $this->isKeepLoggedInChecked())
+			$message = "Welcome and you will be remembered";
+		else if(empty($message))
 			$message = "Welcome";
 		$this->setMessage($message);
 	}
