@@ -39,7 +39,7 @@ class LoginController
      * Function for handling states associated with the login
      */
     public function doLogin() {
-        var_dump(self::$LoginView->isCorrectSession());
+        //var_dump(self::$LoginView->isCorrectSession());
 
         if ((self::$LoginView->doTheUserWantToLogout() && self::$LoginModel->isUserLoggedIn())
                 || !self::$LoginView->isCorrectSession()){
