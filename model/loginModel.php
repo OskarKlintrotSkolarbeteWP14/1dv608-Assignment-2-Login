@@ -67,7 +67,6 @@ class LoginModel
 
     public function saveUser(User $user) {
         $randomizedPassword = $this->createRandomString();
-        var_dump($this->getFileName($user->getUsername()));
         file_put_contents($this->getFileName($user->getUsername()), $randomizedPassword);
         return $randomizedPassword;
     }
@@ -78,7 +77,6 @@ class LoginModel
 
     public function checkCredentialForSavedUser(User $user) {
         try {
-//            var_dump(file_get_contents($this->getFileName($username)));
             return $user->getPassword() == file_get_contents($this->getFileName($user->getUsername()));
         }
         catch (\Exception $e) {
