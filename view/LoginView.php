@@ -172,7 +172,7 @@ class LoginView {
 	}
 
 	public function setLoginWithCookiesView() {
-		$this->setMessage("Login with cookies");
+		$this->setMessage("Welcome back with cookie");
 	}
 
 	public function setFailedLoginWithCookiesView() {
