@@ -22,6 +22,7 @@ class LoginView {
 	private static $message = "MessageSessionVariable";
 	private static $username = "UsernameSessionVariable";
 
+	private static $PHPSessionCookie = "PHPSESSID";
 	private $LoginModel;
 
 	/**
@@ -53,7 +54,7 @@ class LoginView {
 		$User = '';
 		if($_SERVER['REQUEST_METHOD'] == "POST")
 			$User = new User($_POST[self::$name], $_POST[self::$password]);
-		else if (isset($_COOKIE[self::$cookieName]) && isset($_COOKIE[self::$cookiePassword]))
+		else if ($this->isCookiesSet())
 			$User = new User($_COOKIE[self::$cookieName], '');
 		else
 			$User = new User('', '');
@@ -100,8 +101,16 @@ class LoginView {
 		return new User($_COOKIE[self::$cookieName], $_COOKIE[self::$cookiePassword]);
 	}
 
+	public function isCookiesSet() {
+		return isset($_COOKIE[self::$cookieName]) && isset($_COOKIE[self::$cookiePassword]);
+	}
+
+	public function isPhpSession() {
+		return isset($_COOKIE[self::$PHPSessionCookie]);
+	}
+
 	public function checkIfPersistentLoggedIn() {
-		if (isset($_COOKIE[self::$cookieName]) && isset($_COOKIE[self::$cookiePassword])) {
+		if ($this->isCookiesSet()) {
 			$user = new User($_COOKIE[self::$cookieName], $_COOKIE[self::$cookiePassword]);
 			return $this->LoginModel->checkCredentialForSavedUser($user);
 		}
@@ -126,13 +135,21 @@ class LoginView {
 		$this->setMessage("Bye bye!");
 	}
 
+	public function setLoginWithCookiesView() {
+		$this->setMessage("Login with cookies");
+	}
+
+	public function setFailedLoginWithCookiesView() {
+		$this->setMessage("Wrong information in cookies");
+	}
+
 	/**
 	 * @param $message Set a one time message
 	 */
 	private function setMessage($message) {
-		if($_POST) {
+//		if($_POST) {
 			$_SESSION[self::$message] = $message;
-		}
+//		}
 	}
 
 	/**
