@@ -5,7 +5,6 @@ namespace view;
 use model\User;
 
 require_once("./model/LoginModel.php");
-require_once("./model/UserClient.php");
 
 /**
  * Class LoginView
@@ -23,8 +22,6 @@ class LoginView {
 	private static $message = "MessageSessionVariable";
 	private static $username = "UsernameSessionVariable";
 
-	private static $NewUserClient;
-	private static $OldUserClient;
 	private static $PHPSessionCookie = "PHPSESSID";
 	private static $UserClientSession = "UserClientSession";
 	private $LoginModel;
@@ -52,26 +49,8 @@ class LoginView {
 		}
 		return true;
 	}
-
-	private function getSessionCookieName() {
-		return $_COOKIE[self::$PHPSessionCookie];
-	}
-
-	private function getIpAddress() {
-		return $_SERVER['REMOTE_ADDR'];
-	}
-
-	private function getBrowser() {
-		return $_SERVER['HTTP_USER_AGENT'];
-	}
-
 	private function getUserClient() {
-		$userClient = new \model\UserClient($this->getSessionCookieName(),
-			$this->getIpAddress(), $this->getBrowser());
-		return $userClient->getSessionName() . $userClient->getIpAddress() . $userClient->getBrowser();
-//		print_r($_SESSION[self::$UserClientSession]->getSessionName());
-//		print_r($_SESSION[self::$UserClientSession]->getIpAddress());
-//		print_r($_SESSION[self::$UserClientSession]->getBrowser());
+		return $_COOKIE[self::$PHPSessionCookie] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'];
 	}
 
 	/**
@@ -185,8 +164,8 @@ class LoginView {
 	/**
 	 * Set the message to be displayed on logout
 	 */
-	public function setLogoutView($message = null) {
-		$message=$message?$message:"Bye bye!";
+	public function setLogoutView() {
+		$message = "Bye bye!";
 		$this->setMessage($message);
 	}
 

@@ -43,9 +43,7 @@ class LoginController
 
         if ((self::$LoginView->doTheUserWantToLogout() && self::$LoginModel->isUserLoggedIn())
                 || !self::$LoginView->isCorrectSession()){
-            if (!self::$LoginView->isCorrectSession())
-                self::$LoginView->setLogoutView("Stupid hacker.");
-            else
+            if (self::$LoginView->isCorrectSession())
                 self::$LoginView->setLogoutView();
             self::$LoginModel->logout();
             $tempUser = self::$LoginView->removeKeepLogin();
