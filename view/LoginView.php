@@ -88,9 +88,17 @@ class LoginView {
 		setcookie(self::$cookiePassword, $randomizedPassword, -1);
 	}
 
+	/**
+	 * Returns the username of the user that's being deleted
+	 *
+	 * @return string
+	 */
 	public function removeKeepLogin() {
-		if (isset($_COOKIE[self::$cookieName]) || isset($_COOKIE[self::$cookiePassword])) {
-			$tempUsername = $_COOKIE[self::$cookieName];
+		if ($this->isAnyCookiesSet()) {
+			if (isset($_COOKIE[self::$cookieName]))
+				$tempUsername = $_COOKIE[self::$cookieName];
+			else
+				$tempUsername = '';
 			setcookie(self::$cookieName, null, time() - 300);
 			setcookie(self::$cookiePassword, null, time() - 300);
 			return $tempUsername;
@@ -103,6 +111,10 @@ class LoginView {
 
 	public function isCookiesSet() {
 		return isset($_COOKIE[self::$cookieName]) && isset($_COOKIE[self::$cookiePassword]);
+	}
+
+	public function isAnyCookiesSet() {
+		return isset($_COOKIE[self::$cookieName]) || isset($_COOKIE[self::$cookiePassword]);
 	}
 
 	public function isPhpSession() {

@@ -58,7 +58,8 @@ class LoginController
             self::$LoginView->setLoginWithCookiesView();
         }
         else if (!self::$LoginView->checkIfPersistentLoggedIn()) {
-            if (self::$LoginView->isCookiesSet()) {
+            self::$LoginView->removeKeepLogin();
+            if (self::$LoginView->isAnyCookiesSet()) {
                 self::$LoginView->setFailedLoginWithCookiesView();
             }
         }

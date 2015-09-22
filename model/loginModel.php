@@ -76,7 +76,7 @@ class LoginModel
     }
 
     public function checkCredentialForSavedUser(User $user) {
-        try {
+        try { // TODO: Can't catch an error, flippin PHP...
             return $user->getPassword() == file_get_contents($this->getFileName($user->getUsername()));
         }
         catch (\Exception $e) {
