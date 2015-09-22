@@ -39,8 +39,14 @@ class LoginController
      * Function for handling states associated with the login
      */
     public function doLogin() {
-        if (self::$LoginView->doTheUserWantToLogout() && self::$LoginModel->isUserLoggedIn()) {
-            self::$LoginView->setLogoutView();
+        var_dump(self::$LoginView->isCorrectSession());
+
+        if ((self::$LoginView->doTheUserWantToLogout() && self::$LoginModel->isUserLoggedIn())
+                || !self::$LoginView->isCorrectSession()){
+            if (!self::$LoginView->isCorrectSession())
+                self::$LoginView->setLogoutView("Stupid hacker.");
+            else
+                self::$LoginView->setLogoutView();
             self::$LoginModel->logout();
             $tempUser = self::$LoginView->removeKeepLogin();
             self::$LoginModel->removeUser($tempUser);
