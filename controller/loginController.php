@@ -41,15 +41,13 @@ class LoginController
     public function doLogin() {
         //var_dump(self::$LoginView->isCorrectSession());
 
-        if ((self::$LoginView->theUserWantToLogout() && self::$LoginModel->isUserLoggedIn())
-                || !self::$LoginView->isCorrectSession()){
-            if (self::$LoginView->isCorrectSession())
-                self::$LoginView->setLogoutView();
+        if (self::$LoginView->theUserWantToLogout()){
+            self::$LoginView->setLogoutView();
             self::$LoginModel->logout();
-            $tempUser = self::$LoginView->removeKeepLogin();
-            self::$LoginModel->removeUser($tempUser);
+            $tempUsername = self::$LoginView->removeKeepLogin();
+            self::$LoginModel->removeUser($tempUsername);
         }
-        else if(self::$LoginView->theUserWantToLogin() && !self::$LoginModel->isUserLoggedIn()) {
+        else if(self::$LoginView->theUserWantToLogin()) {
             self::$LoginView->setLoginView();
             $successfulLogin = self::$LoginModel->login(self::$LoginView->getUser());
             if($successfulLogin && self::$LoginView->isKeepLoggedInChecked()) {
@@ -57,15 +55,14 @@ class LoginController
                 self::$LoginView->setKeepLogin($randomizedPassword);
             }
         }
-        else if(self::$LoginView->checkIfPersistentLoggedIn() && !self::$LoginView->isPhpSession()) {
+        else if(self::$LoginView->checkIfPersistentLoggedIn()) {
             self::$LoginModel->loginSavedUser(self::$LoginView->getLoggedInUser());
             self::$LoginView->setLoginWithCookiesView();
         }
-        else if (!self::$LoginView->checkIfPersistentLoggedIn()) {
+        else if (!self::$LoginView->validCookies()) {
+//            self::$LoginModel->logout();
             self::$LoginView->removeKeepLogin();
-            if (self::$LoginView->isAnyCookiesSet()) {
-                self::$LoginView->setFailedLoginWithCookiesView();
-            }
+            self::$LoginView->setFailedLoginWithCookiesView();
         }
 
         if (self::$PrgView->isPost()) {

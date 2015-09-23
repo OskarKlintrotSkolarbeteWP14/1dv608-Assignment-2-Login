@@ -24,13 +24,13 @@ class LoginView {
 
 	private static $PHPSessionCookie = "PHPSESSID";
 	private static $UserClientSession = "UserClientSession";
-	private $LoginModel;
+	private static $LoginModel;
 
 	/**
 	 * @param \model\LoginModel $model
 	 */
 	public function __construct(\model\LoginModel $model){
-		$this->LoginModel = $model;
+		self::$LoginModel = $model;
 	}
 
 	private function isNewSession() {
@@ -62,7 +62,7 @@ class LoginView {
 			return "Username is missing";
 		else if(empty($_POST[self::$password]))
 			return "Password is missing";
-		else if (!$this->LoginModel->checkCredential($User))
+		else if (!self::$LoginModel->checkCredential($User))
 			return "Wrong name or password";
 		else
 			return '';
@@ -75,7 +75,7 @@ class LoginView {
 		$User = '';
 		if($_SERVER['REQUEST_METHOD'] == "POST")
 			$User = new User($_POST[self::$name], $_POST[self::$password]);
-		else if ($this->isCookiesSet())
+		else if ($this->cookiesAreSet())
 			$User = new User($_COOKIE[self::$cookieName], '');
 		else
 			$User = new User('', '');
@@ -86,14 +86,16 @@ class LoginView {
 	 * @return bool True if the user wants to login
 	 */
 	public function theUserWantToLogin() {
-		return isset($_POST[self::$login]);
+		return isset($_POST[self::$login]) && !self::$LoginModel->userLoggedIn();
 	}
 
 	/**
-	 * @return bool True if the user wants to logout
+	 * @return bool True if the user wants to logout or if the session is corrupt
 	 */
 	public function theUserWantToLogout() {
-		return isset($_POST[self::$logout]);
+		return (isset($_POST[self::$logout])
+			&& self::$LoginModel->userLoggedIn())
+			|| !$this->isCorrectSession();
 	}
 
 	/** Returns true if the users has checked the "Keep me logged in"-button
@@ -115,7 +117,7 @@ class LoginView {
 	 * @return string
 	 */
 	public function removeKeepLogin() {
-		if ($this->isAnyCookiesSet()) {
+		if ($this->anyCookiesAreSet()) {
 			if (isset($_COOKIE[self::$cookieName]))
 				$tempUsername = $_COOKIE[self::$cookieName];
 			else
@@ -130,11 +132,11 @@ class LoginView {
 		return new User($_COOKIE[self::$cookieName], $_COOKIE[self::$cookiePassword]);
 	}
 
-	public function isCookiesSet() {
+	public function cookiesAreSet() {
 		return isset($_COOKIE[self::$cookieName]) && isset($_COOKIE[self::$cookiePassword]);
 	}
 
-	public function isAnyCookiesSet() {
+	public function anyCookiesAreSet() {
 		return isset($_COOKIE[self::$cookieName]) || isset($_COOKIE[self::$cookiePassword]);
 	}
 
@@ -143,9 +145,13 @@ class LoginView {
 	}
 
 	public function checkIfPersistentLoggedIn() {
-		if ($this->isCookiesSet()) {
+		return $this->validCookies() && !$this->isPhpSession();
+	}
+
+	public function validCookies() {
+		if ($this->cookiesAreSet()) {
 			$user = new User($_COOKIE[self::$cookieName], $_COOKIE[self::$cookiePassword]);
-			return $this->LoginModel->checkCredentialForSavedUser($user);
+			return self::$LoginModel->checkCredentialForSavedUser($user);
 		}
 		return false;
 	}
@@ -167,8 +173,8 @@ class LoginView {
 	 * Set the message to be displayed on logout
 	 */
 	public function setLogoutView() {
-		$message = "Bye bye!";
-		$this->setMessage($message);
+		if($this->isCorrectSession())
+			$this->setMessage("Bye bye!");
 	}
 
 	public function setLoginWithCookiesView() {
@@ -176,7 +182,8 @@ class LoginView {
 	}
 
 	public function setFailedLoginWithCookiesView() {
-		$this->setMessage("Wrong information in cookies");
+		if ($this->anyCookiesAreSet())
+			$this->setMessage("Wrong information in cookies");
 	}
 
 	/**
@@ -212,7 +219,7 @@ class LoginView {
 	public function response() {
 		$message = '';
 
-		if($this->LoginModel->isUserLoggedIn())
+		if(self::$LoginModel->userLoggedIn())
 		{
 			$message = $this->getMessage();
 			$response = $this->generateLogoutButtonHTML($message);

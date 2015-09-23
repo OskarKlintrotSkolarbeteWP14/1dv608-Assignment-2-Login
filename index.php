@@ -21,7 +21,7 @@ $DateTimeView = new \view\DateTimeView();
 $LayoutView = new \view\LayoutView();
 
 $LoginController->doLogin();
-$LayoutView->render($LoginModel->isUserLoggedIn(), $LoginView, $DateTimeView);
+$LayoutView->render($LoginModel->userLoggedIn(), $LoginView, $DateTimeView);
 
 // echo "Server request method";
 // echo var_dump($_SERVER['REQUEST_METHOD']);

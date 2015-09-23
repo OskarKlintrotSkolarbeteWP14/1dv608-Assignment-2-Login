@@ -60,7 +60,7 @@ class LoginModel
     /**
      * @return bool True if the user is logged in, otherwise false
      */
-    public function isUserLoggedIn(){
+    public function userLoggedIn(){
         if (empty($_SESSION[self::$loggedIn]))
             return false;
         return $_SESSION[self::$loggedIn];
