@@ -23,19 +23,27 @@ use model;
 class LoginController
 {
     /**
+     * The view for login
+     *
      * @var view\LoginView
      */
     private static $LoginView;
     /**
+     * The model for login
+     *
      * @var model\LoginModel
      */
     private static $LoginModel;
     /**
+     * The view for Post-Redirect-Get
+     *
      * @var view\PrgView
      */
     private static $PrgView;
 
     /**
+     * Creates the controller
+     *
      * @param model\LoginModel $model
      */
     public function __construct(\model\LoginModel $model){
