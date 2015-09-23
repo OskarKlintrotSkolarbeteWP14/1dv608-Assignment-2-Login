@@ -85,14 +85,14 @@ class LoginView {
 	/**
 	 * @return bool True if the user wants to login
 	 */
-	public function doTheUserWantToLogin() {
+	public function theUserWantToLogin() {
 		return isset($_POST[self::$login]);
 	}
 
 	/**
 	 * @return bool True if the user wants to logout
 	 */
-	public function doTheUserWantToLogout() {
+	public function theUserWantToLogout() {
 		return isset($_POST[self::$logout]);
 	}
 

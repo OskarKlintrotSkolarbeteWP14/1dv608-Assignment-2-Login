@@ -41,7 +41,7 @@ class LoginController
     public function doLogin() {
         //var_dump(self::$LoginView->isCorrectSession());
 
-        if ((self::$LoginView->doTheUserWantToLogout() && self::$LoginModel->isUserLoggedIn())
+        if ((self::$LoginView->theUserWantToLogout() && self::$LoginModel->isUserLoggedIn())
                 || !self::$LoginView->isCorrectSession()){
             if (self::$LoginView->isCorrectSession())
                 self::$LoginView->setLogoutView();
@@ -49,7 +49,7 @@ class LoginController
             $tempUser = self::$LoginView->removeKeepLogin();
             self::$LoginModel->removeUser($tempUser);
         }
-        else if(self::$LoginView->doTheUserWantToLogin() && !self::$LoginModel->isUserLoggedIn()) {
+        else if(self::$LoginView->theUserWantToLogin() && !self::$LoginModel->isUserLoggedIn()) {
             self::$LoginView->setLoginView();
             $successfulLogin = self::$LoginModel->login(self::$LoginView->getUser());
             if($successfulLogin && self::$LoginView->isKeepLoggedInChecked()) {
