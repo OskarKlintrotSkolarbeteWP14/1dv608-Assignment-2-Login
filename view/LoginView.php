@@ -7,6 +7,8 @@ use model\User;
 require_once("./model/LoginModel.php");
 
 /**
+ * The view for login
+ *
  * Class LoginView
  * @package view
  */
@@ -65,6 +67,8 @@ class LoginView {
 	private static $LoginModel;
 
 	/**
+	 * Creates the view
+	 *
 	 * @param \model\LoginModel $model
 	 */
 	public function __construct(\model\LoginModel $model){
@@ -97,6 +101,12 @@ class LoginView {
 		}
 		return true;
 	}
+
+	/**
+	 * Returns a unique string for the users client
+	 *
+	 * @return string
+	 */
 	private function getUserClient() {
 		return $_COOKIE[self::$PHPSessionCookie] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT'];
 	}
@@ -162,6 +172,11 @@ class LoginView {
 		return isset($_POST[self::$keep]);
 	}
 
+	/**
+	 * Creates cookie for the user to be remembered
+	 *
+	 * @param $randomizedPassword
+	 */
 	public function setKeepLogin($randomizedPassword) {
 		setcookie(self::$cookieName, $_POST[self::$name], -1);
 		setcookie(self::$cookiePassword, $randomizedPassword, -1);

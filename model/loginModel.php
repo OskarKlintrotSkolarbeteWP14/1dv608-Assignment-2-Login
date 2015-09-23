@@ -15,22 +15,26 @@ namespace model;
 class LoginModel
 {
     /**
+     * Username
+     *
      * @var string
      */
     private static $username = "Admin";
     /**
+     * Password
+     *
      * @var string
      */
     private static $password = "Password";
     /**
+     * Name of session variable
+     *
      * @var string
      */
     private static $loggedIn = "LoggedInSession";
     /**
-     * @var string
-     */
-    private static $currentSession = "UserClient";
-    /**
+     * Path to where the users are stored
+     *
      * @var string
      */
     private static $folder = "./model/persistentLogin/";
