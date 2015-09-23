@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * The index for the site
+ */
+
 //INCLUDE THE FILES NEEDED...
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');

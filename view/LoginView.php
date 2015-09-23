@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * The view for the login-functionality
+ */
+
 namespace view;
 
 use model\User;
@@ -14,54 +18,80 @@ require_once("./model/LoginModel.php");
  */
 class LoginView {
 	/**
+	 * The login-button
+	 *
 	 * @var string
 	 */
 	private static $login = 'LoginView::Login';
 	/**
+	 * The logout-button
+	 *
 	 * @var string
 	 */
 	private static $logout = 'LoginView::Logout';
 	/**
+	 * The text field where the user inputs username
+	 *
 	 * @var string
 	 */
 	private static $name = 'LoginView::UserName';
 	/**
+	 * The text field where the user inputs password
+	 *
 	 * @var string
 	 */
 	private static $password = 'LoginView::Password';
 	/**
+	 * Name of the cookie containing the username
+	 *
 	 * @var string
 	 */
 	private static $cookieName = 'LoginView::CookieName';
 	/**
+	 * Name of the cookie containing the (randomized) password
+	 *
 	 * @var string
 	 */
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	/**
+	 * Remember me-checkbox
+	 *
 	 * @var string
 	 */
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	/**
+	 * Div tag where a message can be rendered to the user
+	 *
 	 * @var string
 	 */
 	private static $messageId = 'LoginView::Message';
 	/**
+	 * Session variable to store a temporary message
+	 *
 	 * @var string
 	 */
 	private static $message = "MessageSessionVariable";
 	/**
+	 * Session variable to store the username
+	 *
 	 * @var string
 	 */
 	private static $username = "UsernameSessionVariable";
 	/**
+	 * Name of the PHP session session variable
+	 *
 	 * @var string
 	 */
 	private static $PHPSessionCookie = "PHPSESSID";
 	/**
+	 * Session variable to temporarily store a, for the user client, unique string
+	 *
 	 * @var string
 	 */
 	private static $UserClientSession = "UserClientSession";
 	/**
+	 * The model for login
+	 *
 	 * @var \model\LoginModel
 	 */
 	private static $LoginModel;

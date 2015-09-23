@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Only function is to create a string with information
+ * about the current date and time
+ */
+
 namespace view;
 
 /**
