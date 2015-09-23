@@ -1,6 +1,10 @@
 <?php
 
 /**
+ * Created by Daniel Toll, edited by Oskar Klintrot
+ */
+
+/**
  * The index for the site
  */
 
