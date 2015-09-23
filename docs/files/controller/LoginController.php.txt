@@ -88,6 +88,8 @@ class LoginController
     }
 
     /**
+     * Returns the view for login
+     *
      * @return view\LoginView
      */
     public function getLoginView() {
