@@ -22,8 +22,17 @@ use model;
  */
 class LoginController
 {
+    /**
+     * @var view\LoginView
+     */
     private static $LoginView;
+    /**
+     * @var model\LoginModel
+     */
     private static $LoginModel;
+    /**
+     * @var view\PrgView
+     */
     private static $PrgView;
 
     /**
@@ -39,14 +48,32 @@ class LoginController
      * Function for handling states associated with the login
      */
     public function doLogin() {
-        if (self::$LoginView->doTheUserWantToLogout() && self::$LoginModel->isUserLoggedIn()) {
+        //var_dump(self::$LoginView->isCorrectSession());
+
+        if (self::$LoginView->theUserWantToLogout()){
             self::$LoginView->setLogoutView();
             self::$LoginModel->logout();
+            $tempUsername = self::$LoginView->removeKeepLogin();
+            self::$LoginModel->removeUser($tempUsername);
         }
-        else if(self::$LoginView->doTheUserWantToLogin() && !self::$LoginModel->isUserLoggedIn()) {
+        else if(self::$LoginView->theUserWantToLogin()) {
             self::$LoginView->setLoginView();
-            self::$LoginModel->login(self::$LoginView->getUser());
+            $successfulLogin = self::$LoginModel->login(self::$LoginView->getUser());
+            if($successfulLogin && self::$LoginView->isKeepLoggedInChecked()) {
+                $randomizedPassword = self::$LoginModel->saveUser(self::$LoginView->getUser());
+                self::$LoginView->setKeepLogin($randomizedPassword);
+            }
         }
+        else if(self::$LoginView->checkIfPersistentLoggedIn()) {
+            self::$LoginModel->loginSavedUser(self::$LoginView->getPersistentLoggedInUser());
+            self::$LoginView->setLoginWithCookiesView();
+        }
+        else if (!self::$LoginView->validCookies()) {
+//            self::$LoginModel->logout();
+            self::$LoginView->removeKeepLogin();
+            self::$LoginView->setFailedLoginWithCookiesView();
+        }
+
         if (self::$PrgView->isPost()) {
             self::$PrgView->reloadPage();
         }

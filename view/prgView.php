@@ -15,6 +15,8 @@ namespace view;
 class PrgView
 {
     /**
+     * Check if the server request is a POST
+     *
      * @return bool True if server request is a POST
      */
     public function isPost() {

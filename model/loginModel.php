@@ -14,10 +14,25 @@ namespace model;
  */
 class LoginModel
 {
+    /**
+     * @var string
+     */
     private static $username = "Admin";
+    /**
+     * @var string
+     */
     private static $password = "Password";
+    /**
+     * @var string
+     */
     private static $loggedIn = "LoggedInSession";
+    /**
+     * @var string
+     */
     private static $currentSession = "UserClient";
+    /**
+     * @var string
+     */
     private static $folder = "./model/persistentLogin/";
 
     /** Returns a randomized string
@@ -31,6 +46,8 @@ class LoginModel
     }
 
     /**
+     * Validates the credentials for the user
+     *
      * @param User $user User to be authenticated
      * @return bool True if the login succeed, otherwise returns false
      */
@@ -39,7 +56,8 @@ class LoginModel
     }
 
     /**
-     * Logs in the user
+     * Login the user
+     *
      * @param User $user User to login
      */
     public function login(User $user)
@@ -58,6 +76,8 @@ class LoginModel
     }
 
     /**
+     * Check if the user is currently logged in
+     *
      * @return bool True if the user is logged in, otherwise false
      */
     public function userLoggedIn(){
@@ -66,16 +86,33 @@ class LoginModel
         return $_SESSION[self::$loggedIn];
     }
 
+    /**
+     * Saves the user and a randomized password
+     *
+     * @param User $user User to be saved
+     * @return string The randomized password
+     */
     public function saveUser(User $user) {
         $randomizedPassword = $this->createRandomString();
         file_put_contents($this->getFileName($user->getUsername()), $randomizedPassword);
         return $randomizedPassword;
     }
 
+    /**
+     * Removes a user
+     *
+     * @param $username Username of the user to be removed
+     */
     public function removeUser($username) {
         unlink($this->getFileName($username));
     }
 
+    /**
+     * Validates a user that is supposed to be saved
+     *
+     * @param User $user User to be validated
+     * @return bool
+     */
     public function checkCredentialForSavedUser(User $user) {
         try { // TODO: Can't catch an error, flippin PHP...
             return $user->getPassword() == file_get_contents($this->getFileName($user->getUsername()));
@@ -85,10 +122,22 @@ class LoginModel
         }
     }
 
+    /**
+     * Login a saved user again
+     *
+     * @param User $user User to be logged in
+     */
     public function loginSavedUser(User $user) {
         $_SESSION[self::$loggedIn] = $this->checkCredentialForSavedUser($user);
     }
 
+    /**
+     * Returns the path and filename to file that
+     * stores credentials for a user
+     *
+     * @param $username Username of user to be retrieved
+     * @return string Path to file
+     */
     public function getFileName($username) {
         return self::$folder . $username;
     }

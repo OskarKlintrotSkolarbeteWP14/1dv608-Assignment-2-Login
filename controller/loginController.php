@@ -22,8 +22,17 @@ use model;
  */
 class LoginController
 {
+    /**
+     * @var view\LoginView
+     */
     private static $LoginView;
+    /**
+     * @var model\LoginModel
+     */
     private static $LoginModel;
+    /**
+     * @var view\PrgView
+     */
     private static $PrgView;
 
     /**
@@ -56,7 +65,7 @@ class LoginController
             }
         }
         else if(self::$LoginView->checkIfPersistentLoggedIn()) {
-            self::$LoginModel->loginSavedUser(self::$LoginView->getLoggedInUser());
+            self::$LoginModel->loginSavedUser(self::$LoginView->getPersistentLoggedInUser());
             self::$LoginView->setLoginWithCookiesView();
         }
         else if (!self::$LoginView->validCookies()) {

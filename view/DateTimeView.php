@@ -8,6 +8,8 @@ namespace view;
 class DateTimeView {
 
 	/**
+	 * Returns a string with the current date and time
+	 *
 	 * @return string Current date and time
 	 */
 	public function show() {

@@ -11,19 +11,57 @@ require_once("./model/LoginModel.php");
  * @package view
  */
 class LoginView {
+	/**
+	 * @var string
+	 */
 	private static $login = 'LoginView::Login';
+	/**
+	 * @var string
+	 */
 	private static $logout = 'LoginView::Logout';
+	/**
+	 * @var string
+	 */
 	private static $name = 'LoginView::UserName';
+	/**
+	 * @var string
+	 */
 	private static $password = 'LoginView::Password';
+	/**
+	 * @var string
+	 */
 	private static $cookieName = 'LoginView::CookieName';
+	/**
+	 * @var string
+	 */
 	private static $cookiePassword = 'LoginView::CookiePassword';
+	/**
+	 * @var string
+	 */
 	private static $keep = 'LoginView::KeepMeLoggedIn';
+	/**
+	 * @var string
+	 */
 	private static $messageId = 'LoginView::Message';
+	/**
+	 * @var string
+	 */
 	private static $message = "MessageSessionVariable";
+	/**
+	 * @var string
+	 */
 	private static $username = "UsernameSessionVariable";
-
+	/**
+	 * @var string
+	 */
 	private static $PHPSessionCookie = "PHPSESSID";
+	/**
+	 * @var string
+	 */
 	private static $UserClientSession = "UserClientSession";
+	/**
+	 * @var \model\LoginModel
+	 */
 	private static $LoginModel;
 
 	/**
@@ -33,11 +71,21 @@ class LoginView {
 		self::$LoginModel = $model;
 	}
 
+	/**
+	 * Returns true if it's a new PHP session
+	 *
+	 * @return bool
+	 */
 	private function isNewSession() {
 		return !isset($_COOKIE[self::$PHPSessionCookie]);
 	}
 
-	public function isCorrectSession() {
+	/**
+	 * Returns true if the session is valid
+	 *
+	 * @return bool
+	 */
+	public function validSession() {
 		if(!$this->isNewSession()) {
 			if(isset($_SESSION[self::$UserClientSession])) {
 				if ($_SESSION[self::$UserClientSession] == $this->getUserClient())
@@ -54,6 +102,8 @@ class LoginView {
 	}
 
 	/**
+	 * Only validates the credentials, don't actually login.
+	 *
 	 * @param User $User
 	 * @return string Error message, empty if credentials are valid
 	 */
@@ -69,6 +119,8 @@ class LoginView {
 	}
 
 	/**
+	 * Returns the current User
+	 *
 	 * @return User|string The user entered in the UI
 	 */
 	public function getUser() {
@@ -83,6 +135,8 @@ class LoginView {
 	}
 
 	/**
+	 * Returns true if the user wants to login
+	 *
 	 * @return bool True if the user wants to login
 	 */
 	public function theUserWantToLogin() {
@@ -90,12 +144,14 @@ class LoginView {
 	}
 
 	/**
+	 * Returns true if the user wants to logout or if the session is corrupt
+	 *
 	 * @return bool True if the user wants to logout or if the session is corrupt
 	 */
 	public function theUserWantToLogout() {
 		return (isset($_POST[self::$logout])
 			&& self::$LoginModel->userLoggedIn())
-			|| !$this->isCorrectSession();
+			|| !$this->validSession();
 	}
 
 	/** Returns true if the users has checked the "Keep me logged in"-button
@@ -128,26 +184,57 @@ class LoginView {
 		}
 	}
 
-	public function getLoggedInUser() {
+	/**
+	 * Returns the user that is persistent logged in
+	 *
+	 * @return User
+	 */
+	public function getPersistentLoggedInUser() {
 		return new User($_COOKIE[self::$cookieName], $_COOKIE[self::$cookiePassword]);
 	}
 
+	/**
+	 * Returns true if ALL cookies are set
+	 *
+	 * @return bool
+	 */
 	public function cookiesAreSet() {
 		return isset($_COOKIE[self::$cookieName]) && isset($_COOKIE[self::$cookiePassword]);
 	}
 
+	/**
+	 * Returns true if ANY cookie are set
+	 *
+	 * @return bool
+	 */
 	public function anyCookiesAreSet() {
 		return isset($_COOKIE[self::$cookieName]) || isset($_COOKIE[self::$cookiePassword]);
 	}
 
+	/**
+	 * Returns true if this is a current PHP session
+	 *
+	 * @return bool
+	 */
 	public function isPhpSession() {
 		return isset($_COOKIE[self::$PHPSessionCookie]);
 	}
 
+	/**
+	 * Returns true if there is a user logged
+	 * in but there is no current PHP session
+	 *
+	 * @return bool
+	 */
 	public function checkIfPersistentLoggedIn() {
 		return $this->validCookies() && !$this->isPhpSession();
 	}
 
+	/**
+	 * Validates the cookies
+	 *
+	 * @return bool True if the cookies are valid
+	 */
 	public function validCookies() {
 		if ($this->cookiesAreSet()) {
 			$user = new User($_COOKIE[self::$cookieName], $_COOKIE[self::$cookiePassword]);
@@ -173,20 +260,28 @@ class LoginView {
 	 * Set the message to be displayed on logout
 	 */
 	public function setLogoutView() {
-		if($this->isCorrectSession())
+		if($this->validSession())
 			$this->setMessage("Bye bye!");
 	}
 
+	/**
+	 * Sets the welcome message if the users logs in with cookies
+	 */
 	public function setLoginWithCookiesView() {
 		$this->setMessage("Welcome back with cookie");
 	}
 
+	/**
+	 * Sets the error message if login with cookies fails
+	 */
 	public function setFailedLoginWithCookiesView() {
 		if ($this->anyCookiesAreSet())
 			$this->setMessage("Wrong information in cookies");
 	}
 
 	/**
+	 * Function that sets a message that only can be retrieved once
+	 *
 	 * @param $message Set a one time message
 	 */
 	private function setMessage($message) {
@@ -196,6 +291,8 @@ class LoginView {
 	}
 
 	/**
+	 * Function that gets a message that only can be retrieved once
+	 *
 	 * @return string Can only be get once, then it is deleted
 	 */
 	private function getMessage() {
@@ -276,6 +373,8 @@ class LoginView {
 	}
 
 	/**
+	 * Returns the username that the user tries to login with
+	 *
 	 * @return string Username that the user tries to login with
 	 */
 	private function getRequestUserName() {

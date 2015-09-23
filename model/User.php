@@ -14,11 +14,18 @@ namespace model;
  */
 class User
 {
+    /**
+     * @var string Username of the User
+     */
     private $username;
+    /**
+     * @var string Password of the User
+     */
     private $password;
 
     /**
      * Creates the user, both username and password can be null
+     *
      * @param string $username
      * @param string $password
      */
@@ -29,6 +36,8 @@ class User
     }
 
     /**
+     * Returns the username of the user
+     *
      * @return string The users username
      */
     public function getUsername(){
@@ -36,6 +45,8 @@ class User
     }
 
     /**
+     * Returns the password of the user
+     *
      * @return string The users password
      */
     public function getPassword(){
