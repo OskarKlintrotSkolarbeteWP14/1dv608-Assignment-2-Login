@@ -1,9 +1,13 @@
 <?php
+/**
+ * Created by Daniel Toll
+ */
 
 namespace view;
 
 /**
  * Class LayoutView
+ * @package view
  */
 
 class LayoutView {
@@ -35,6 +39,8 @@ class LayoutView {
   }
 
   /**
+   * Render "Logged in" or "Not logged in" depending on the current state
+   *
    * @param $isLoggedIn
    * @return string
    */

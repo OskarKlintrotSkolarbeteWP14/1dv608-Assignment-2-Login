@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * Created by Daniel Toll, edited by Oskar Klintrot
+ */
+
+/**
+ * The index for the site
+ */
+
 //INCLUDE THE FILES NEEDED...
 require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
@@ -21,7 +29,21 @@ $DateTimeView = new \view\DateTimeView();
 $LayoutView = new \view\LayoutView();
 
 $LoginController->doLogin();
-$LayoutView->render($LoginModel->isUserLoggedIn(), $LoginView, $DateTimeView);
+$LayoutView->render($LoginModel->userLoggedIn(), $LoginView, $DateTimeView);
 
 // echo "Server request method";
 // echo var_dump($_SERVER['REQUEST_METHOD']);
+
+//var_dump($_SESSION["LoggedInSession"]);
+//if(isset($_COOKIE["LoginView::CookieName"]) || isset($_COOKIE["LoginView::CookiePassword"])) {
+//    if (isset($_COOKIE["LoginView::CookieName"]))
+//        var_dump($_COOKIE["LoginView::CookieName"]);
+//    else
+//        echo 'No username cookie found';
+//    if (isset($_COOKIE["LoginView::CookiePassword"]))
+//        var_dump($_COOKIE["LoginView::CookiePassword"]);
+//    else
+//        echo 'No password cookie found';
+//}
+//else
+//    echo 'No cookies found';

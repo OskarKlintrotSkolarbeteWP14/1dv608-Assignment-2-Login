@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * Only function is to create a string with information
+ * about the current date and time
+ */
+
 namespace view;
 
 /**
@@ -8,6 +13,8 @@ namespace view;
 class DateTimeView {
 
 	/**
+	 * Returns a string with the current date and time
+	 *
 	 * @return string Current date and time
 	 */
 	public function show() {
